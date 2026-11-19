@@ -2,13 +2,15 @@
 
 [Deutsch](#deutsch) · [English](#english)
 
+**[Direktdownload / Direct download (ZIP)](https://github.com/Leak1337/probably-stolen-trainer/releases/latest/download/Probably-Stolen-Trainer.zip)** · [Alle Versionen / All releases](https://github.com/Leak1337/probably-stolen-trainer/releases)
+
 ## Deutsch
 
 Ein Live-Mod für **Probably Stolen – Cyberpunk Shopkeeper Sim**, gebaut gegen Version **100-Rev13**.
 
 ### Installation
 
-1. Kompiliere den Mod mit dem unten gezeigten Befehl. Kopiere `bin\Release\netstandard2.1\ProbablyStolenTrainer.dll` und `manifest.xml` in `Mods\probably_stolen_trainer` neben `Probably Stolen.exe`. Falls du ein fertiges ZIP hast, entpacke es direkt in `Mods`.
+1. Entpacke das ZIP aus dem Direktdownload in den Ordner `Mods` neben `Probably Stolen.exe`. Die Datei `manifest.xml` liegt danach in `Mods\probably_stolen_trainer`.
 2. Aktiviere **Probably Stolen Trainer** im Hauptmenü unter **Mods** und starte das Spiel neu.
 3. Lade einen Spielstand oder starte ein neues Spiel. Drücke **F7**, um das Menü zu öffnen oder zu schließen. Mit **DE / EN** wechselst du die Menüsprache. Beim ersten Öffnen richtet sie sich nach der Systemsprache.
 
@@ -28,6 +30,8 @@ Führe den Befehl im Quellcodeordner mit dem .NET SDK aus und ersetze den Beispi
 dotnet build -c Release -p:GameDirectory='D:\Pfad\zu\Probably Stolen'
 ```
 
+Kopiere `bin\Release\netstandard2.1\ProbablyStolenTrainer.dll` und `manifest.xml` in `Mods\probably_stolen_trainer`.
+
 [Modding-Dokumentation der Entwickler](https://github.com/dragonpan2/probably-stolen-modding)
 
 ## English
@@ -36,7 +40,7 @@ A live mod for **Probably Stolen – Cyberpunk Shopkeeper Sim**, built against v
 
 ### Installation
 
-1. Build the mod using the command below. Copy `bin\Release\netstandard2.1\ProbablyStolenTrainer.dll` and `manifest.xml` to `Mods\probably_stolen_trainer` next to `Probably Stolen.exe`. If you have a prebuilt ZIP, extract it directly into `Mods`.
+1. Extract the direct-download ZIP into the `Mods` folder next to `Probably Stolen.exe`. The `manifest.xml` file should then be in `Mods\probably_stolen_trainer`.
 2. Enable **Probably Stolen Trainer** under **Mods** in the main menu and restart the game.
 3. Load a save or start a new game. Press **F7** to open or close the menu. Use **DE / EN** to switch languages. The menu defaults to your system language when first opened, with English as the fallback.
 
@@ -55,5 +59,7 @@ Run this command in the source directory using the .NET SDK. Replace the example
 ```powershell
 dotnet build -c Release -p:GameDirectory='D:\Path\to\Probably Stolen'
 ```
+
+Copy `bin\Release\netstandard2.1\ProbablyStolenTrainer.dll` and `manifest.xml` to `Mods\probably_stolen_trainer`.
 
 [Developer modding documentation](https://github.com/dragonpan2/probably-stolen-modding)
