@@ -13,7 +13,6 @@ namespace ProbablyStolenTrainer
         private const int PageSize = 6;
         private const int MaximumQuantity = 50;
 
-        private bool itemsTab;
         private List<ItemCatalogEntry> catalog;
         private List<ItemCatalogEntry> matches;
         private ItemCatalogEntry selectedItem;
@@ -23,7 +22,6 @@ namespace ProbablyStolenTrainer
 
         private void ResetItems()
         {
-            itemsTab = false;
             catalog = null;
             matches = null;
             selectedItem = null;

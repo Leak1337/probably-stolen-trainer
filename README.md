@@ -20,6 +20,7 @@ Ein Live-Mod für **Probably Stolen – Cyberpunk Shopkeeper Sim**, gebaut gegen
 - **Guthaben setzen.** Gib eine ganze Zahl von 0 bis 2.147.483.647 ohne Tausendertrennzeichen ein und klicke **Setzen**.
 - **Mindeststand halten.** Aktiviere die Option bei der gewünschten Währung. Fällt das Guthaben unter den Stand bei Aktivierung, füllt der Trainer es bis zu diesem Wert auf. Der Mindeststand bleibt bei geschlossenem Trainer-Menü aktiv und wird beim Laden eines Spielstands oder Starten eines neuen Spiels zurückgesetzt. Schalte ihn aus, bevor du einen niedrigeren Wert setzt.
 - **Gegenstände hinzufügen.** Öffne den Reiter **Gegenstände**, suche nach Name oder ID, wähle einen Treffer und gib eine Menge von 1 bis 50 ein. **Ins Inventar** fügt so viele Einheiten hinzu, wie im Ladeninventar Platz haben. Die Liste verwendet die Spielsprache, sofern ein lokalisierter Name verfügbar ist.
+- **Personen und Ware analysieren.** Unter **F7 → Analyse** schaltest du jede Anzeige einzeln ein. Die Kundenanzeige oben rechts zeigt Fahndungsstatus und Augmentierung samt Stufe. Fahre mit der Maus über Ware, um unterstützte Fälschungen, Repliken, Diebesgut, Schmuggelware und verfälschte Haltbarkeit zu erkennen. Je nach Ware zeigt der Tooltip die tatsächliche Reinheit, Frische, Qualität, Haltbarkeit oder den Gutachterwert. Das Spiel speichert die gewählten Anzeigeoptionen in der Mod-Konfiguration.
 
 Das Spiel übernimmt die aktuellen Guthaben beim regulären Speichern. Zum Entfernen deaktiviere den Mod und lösche bei geschlossenem Spiel den Ordner `Mods\probably_stolen_trainer`.
 
@@ -51,6 +52,7 @@ A live mod for **Probably Stolen – Cyberpunk Shopkeeper Sim**, built against v
 - **Set a balance.** Enter a whole number from 0 to 2,147,483,647 without thousands separators and click **Set**.
 - **Keep a minimum balance.** Turn on the option for either currency. Whenever the balance drops below the amount it had when enabled, the trainer tops it up to that amount. The minimum stays active while the trainer menu is closed and resets when you load a save or start a new game. Turn it off before setting a lower balance.
 - **Add items.** Open the **Items** tab, search by name or ID, select a result, and enter a quantity from 1 to 50. **Add to inventory** adds as many units as will fit in the shop inventory. The list uses the game's language where localized names are available.
+- **Inspect people and goods.** Open **F7 → Inspection** to enable each display separately. The customer panel in the top right shows wanted status and augmentation tier. Hover over an item to reveal supported counterfeits, replicas, stolen goods, contraband, and misrepresented durability. Depending on the item, the tooltip shows true purity, freshness, quality, durability, or appraisal value. The game saves the display options in the mod configuration.
 
 The game's regular save process keeps your current balances. To remove the mod, disable it, close the game, and delete `Mods\probably_stolen_trainer`.
 

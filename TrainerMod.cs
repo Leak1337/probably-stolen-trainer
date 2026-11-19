@@ -7,19 +7,25 @@ namespace ProbablyStolenTrainer
     public sealed class TrainerMod : IMod
     {
         private TrainerPanel panel;
+        private InspectionOptions inspection;
 
-        public void Init(ModManifest manifest) { }
+        public void Init(ModManifest manifest)
+        {
+            inspection = new InspectionOptions(ModHelper.GetConfig(manifest.ID));
+        }
 
         public void OnEnable()
         {
             ModHook.OnGameLoadedNormal += CreatePanel;
             ModHook.OnNewGameStarted += OnNewGame;
+            ModHook.OnCreateTooltipLate += inspection.AppendItemDetails;
         }
 
         public void OnDisable()
         {
             ModHook.OnGameLoadedNormal -= CreatePanel;
             ModHook.OnNewGameStarted -= OnNewGame;
+            ModHook.OnCreateTooltipLate -= inspection.AppendItemDetails;
 
             if (panel != null)
             {
@@ -37,6 +43,7 @@ namespace ProbablyStolenTrainer
                 // Gehört zur Spielszene / Owned by the gameplay scene.
                 var panelObject = new GameObject("Probably Stolen Trainer");
                 panel = panelObject.AddComponent<TrainerPanel>();
+                panel.Inspection = inspection;
             }
 
             panel.ResetSession();
@@ -52,8 +59,11 @@ namespace ProbablyStolenTrainer
         private readonly BalanceControl credits = new BalanceControl();
         private readonly BalanceControl favor = new BalanceControl();
         private bool visible;
+        private int selectedTab;
         private string message = "";
         private Rect window = new Rect(24, 40, 420, 425);
+
+        internal InspectionOptions Inspection { get; set; }
 
         private void Awake() => german ??= Application.systemLanguage == SystemLanguage.German;
 
@@ -62,6 +72,7 @@ namespace ProbablyStolenTrainer
             credits.Reset();
             favor.Reset();
             ResetItems();
+            selectedTab = 0;
             visible = false;
             message = "";
         }
@@ -87,14 +98,16 @@ namespace ProbablyStolenTrainer
 
         private void OnGUI()
         {
-            if (!visible || !PlayerStore.HasInstance)
+            if (!PlayerStore.HasInstance)
                 return;
 
             int previousDepth = GUI.depth;
             try
             {
                 GUI.depth = -100;
-                window = GUI.Window(GetInstanceID(), window, DrawPanel, "Probably Stolen Trainer");
+                Inspection.DrawCustomer(PlayerStore.Instance);
+                if (visible)
+                    window = GUI.Window(GetInstanceID(), window, DrawPanel, "Probably Stolen Trainer");
             }
             finally
             {
@@ -119,27 +132,31 @@ namespace ProbablyStolenTrainer
             GUILayout.EndHorizontal();
 
             GUILayout.Space(6);
-            bool nextTab = GUILayout.Toolbar(itemsTab ? 1 : 0, new[]
+            int nextTab = GUILayout.Toolbar(selectedTab, new[]
             {
-                Text("Guthaben", "Balances"), Text("Gegenstände", "Items")
-            }) == 1;
-            if (nextTab != itemsTab)
+                Text("Guthaben", "Balances"), Text("Gegenstände", "Items"), Text("Analyse", "Inspection")
+            });
+            if (nextTab != selectedTab)
             {
-                itemsTab = nextTab;
+                selectedTab = nextTab;
                 message = "";
                 GUIUtility.ExitGUI();
             }
 
             GUILayout.Space(8);
-            if (itemsTab)
+            switch (selectedTab)
             {
-                DrawItems();
-            }
-            else
-            {
-                DrawBalance("Credits", ref store.playerCash, credits, 1000, 10000);
-                GUILayout.Space(10);
-                DrawBalance("Wild Favor", ref store.wildFavor, favor, 100, 1000);
+                case 1:
+                    DrawItems();
+                    break;
+                case 2:
+                    Inspection.DrawOptions();
+                    break;
+                default:
+                    DrawBalance("Credits", ref store.playerCash, credits, 1000, 10000);
+                    GUILayout.Space(10);
+                    DrawBalance("Wild Favor", ref store.wildFavor, favor, 100, 1000);
+                    break;
             }
 
             GUILayout.Space(8);
@@ -205,9 +222,11 @@ namespace ProbablyStolenTrainer
             message = Text($"{name} auf {Number(value)} gesetzt", $"{name} set to {Number(value)}");
         }
 
-        private static string Text(string de, string en) => german == true ? de : en;
+        internal static string Text(string de, string en) => IsGerman ? de : en;
 
-        private static string Number(int value) => value.ToString("N0", german == true ? German : English);
+        internal static string Number(int value) => value.ToString("N0", IsGerman ? German : English);
+
+        private static bool IsGerman => german ?? (Application.systemLanguage == SystemLanguage.German);
     }
 
     internal sealed class BalanceControl

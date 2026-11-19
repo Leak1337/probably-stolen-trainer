@@ -3,8 +3,8 @@
   <ID>probably_stolen_trainer</ID>
   <Name>Probably Stolen Trainer</Name>
   <Author>Local</Author>
-  <ModVersion>1.2</ModVersion>
-  <Description>DE: Guthaben bearbeiten und Gegenstände suchen und hinzufügen. Im Spiel F7 drücken. EN: Edit balances and search for and add items. Press F7 in-game.</Description>
+  <ModVersion>1.3</ModVersion>
+  <Description>DE: Guthaben, Item-Spawner und Analyse für Kunden, Echtheit und Qualität. Im Spiel F7 drücken. EN: Balances, item spawner, and inspection for customers, authenticity, and quality. Press F7 in-game.</Description>
   <GameVersions>
     <Version>1.0.0.13</Version>
   </GameVersions>
