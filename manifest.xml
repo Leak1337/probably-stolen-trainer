@@ -3,8 +3,8 @@
   <ID>probably_stolen_trainer</ID>
   <Name>Probably Stolen Trainer</Name>
   <Author>Local</Author>
-  <ModVersion>1.5</ModVersion>
-  <Description>DE: Guthaben, Gegenstände, Analyse, Laden und Wartung. Im Spiel F7 drücken. EN: Balances, items, inspection, shop tools, and maintenance. Press F7 in-game.</Description>
+  <ModVersion>1.6</ModVersion>
+  <Description>DE: Trainer mit Handelswarnung für riskante Ware. Im Spiel F7 drücken. EN: Trainer with warnings for risky trades. Press F7 in-game.</Description>
   <GameVersions>
     <Version>1.0.0.13</Version>
   </GameVersions>

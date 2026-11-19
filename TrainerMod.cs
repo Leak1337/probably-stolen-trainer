@@ -26,6 +26,7 @@ namespace ProbablyStolenTrainer
             ModHook.OnGameLoadedNormal -= CreatePanel;
             ModHook.OnNewGameStarted -= OnNewGame;
             ModHook.OnCreateTooltipLate -= inspection.AppendItemDetails;
+            TradeWarnings.Stop();
 
             if (panel != null)
             {
@@ -77,6 +78,7 @@ namespace ProbablyStolenTrainer
             favor.Reset();
             ResetItems();
             ResetStoreTools();
+            TradeWarnings.Reset();
             selectedTab = 0;
             visible = false;
             message = "";

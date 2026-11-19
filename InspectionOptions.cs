@@ -18,6 +18,7 @@ namespace ProbablyStolenTrainer
             augmentedCustomers = Define(config, "show_augmented_customers", "Augmentierte Kunden erkennen", "Identify augmented customers");
             authenticity = Define(config, "show_authenticity", "Fälschungen, Diebesgut und Schmuggelware erkennen", "Identify fakes, stolen goods, and contraband");
             quality = Define(config, "show_quality", "Wahre Qualität und Gutachterwert anzeigen", "Show true quality and appraisal value");
+            TradeWarnings.Initialize(config);
         }
 
         private static ConfigEntry<bool> Define(ModConfig config, string key, string de, string en) =>
@@ -32,6 +33,9 @@ namespace ProbablyStolenTrainer
             GUILayout.Label(Text("Im Infofenster der Ware", "In item tooltips"));
             DrawToggle(authenticity);
             DrawToggle(quality);
+            GUILayout.Space(12);
+            GUILayout.Label(Text("Beim Handeln", "When trading"));
+            DrawToggle(TradeWarnings.Option);
         }
 
         private static void DrawToggle(ConfigEntry<bool> option)
@@ -88,7 +92,7 @@ namespace ProbablyStolenTrainer
                 builder.AddLine(detail);
         }
 
-        private static void AddAuthenticity(List<string> details, GameItem item)
+        internal static void AddAuthenticity(List<string> details, GameItem item, bool includeGenuine = true)
         {
             bool counterfeit = item.IsTag(WineHelper.WINE_COUNTERFEIT_TAG) || RibwichHelper.IsCounterfeit(item);
             bool genuine = false;
@@ -126,7 +130,7 @@ namespace ProbablyStolenTrainer
                 details.Add(Text("Echtheit · Fälschung", "Authenticity · Counterfeit"));
             else if (replica)
                 details.Add(Text("Echtheit · Replik", "Authenticity · Replica"));
-            else if (genuine)
+            else if (genuine && includeGenuine)
                 details.Add(Text("Echtheit · Echt", "Authenticity · Genuine"));
 
             if (StolenHelper.IsStolenItem(item))
