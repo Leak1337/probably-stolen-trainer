@@ -6,7 +6,7 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <ItemGroup>
-    <GameAssembly Include="Assembly-CSharp;UnityEngine.CoreModule;UnityEngine.IMGUIModule;UnityEngine.InputLegacyModule" />
+    <GameAssembly Include="Assembly-CSharp;UnityEngine.CoreModule;UnityEngine.IMGUIModule;UnityEngine.InputLegacyModule;Unity.Localization" />
     <Reference Include="@(GameAssembly)">
       <HintPath>$(ManagedDirectory)\%(Identity).dll</HintPath>
       <Private>false</Private>

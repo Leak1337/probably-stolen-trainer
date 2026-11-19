@@ -43,7 +43,7 @@ namespace ProbablyStolenTrainer
         }
     }
 
-    public sealed class TrainerPanel : MonoBehaviour
+    public sealed partial class TrainerPanel : MonoBehaviour
     {
         private static readonly CultureInfo German = CultureInfo.GetCultureInfo("de-DE");
         private static readonly CultureInfo English = CultureInfo.GetCultureInfo("en-US");
@@ -53,7 +53,7 @@ namespace ProbablyStolenTrainer
         private readonly BalanceControl favor = new BalanceControl();
         private bool visible;
         private string message = "";
-        private Rect window = new Rect(24, 64, 360, 334);
+        private Rect window = new Rect(24, 40, 420, 425);
 
         private void Awake() => german ??= Application.systemLanguage == SystemLanguage.German;
 
@@ -61,6 +61,7 @@ namespace ProbablyStolenTrainer
         {
             credits.Reset();
             favor.Reset();
+            ResetItems();
             visible = false;
             message = "";
         }
@@ -117,10 +118,29 @@ namespace ProbablyStolenTrainer
             }
             GUILayout.EndHorizontal();
 
+            GUILayout.Space(6);
+            bool nextTab = GUILayout.Toolbar(itemsTab ? 1 : 0, new[]
+            {
+                Text("Guthaben", "Balances"), Text("Gegenstände", "Items")
+            }) == 1;
+            if (nextTab != itemsTab)
+            {
+                itemsTab = nextTab;
+                message = "";
+                GUIUtility.ExitGUI();
+            }
+
             GUILayout.Space(8);
-            DrawBalance("Credits", ref store.playerCash, credits, 1000, 10000);
-            GUILayout.Space(10);
-            DrawBalance("Wild Favor", ref store.wildFavor, favor, 100, 1000);
+            if (itemsTab)
+            {
+                DrawItems();
+            }
+            else
+            {
+                DrawBalance("Credits", ref store.playerCash, credits, 1000, 10000);
+                GUILayout.Space(10);
+                DrawBalance("Wild Favor", ref store.wildFavor, favor, 100, 1000);
+            }
 
             GUILayout.Space(8);
             GUILayout.Label(message);
