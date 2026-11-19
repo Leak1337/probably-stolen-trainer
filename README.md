@@ -18,9 +18,12 @@ Ein Live-Mod für **Probably Stolen – Cyberpunk Shopkeeper Sim**, gebaut gegen
 
 - **Credits** um 1.000 oder 10.000 und **Wild Favor** um 100 oder 1.000 erhöhen.
 - **Guthaben setzen.** Gib eine ganze Zahl von 0 bis 2.147.483.647 ohne Tausendertrennzeichen ein und klicke **Setzen**.
+- **Guthabenänderung rückgängig machen.** Der jeweilige Knopf neben **Setzen** kehrt die letzte manuelle Trainer-Änderung für Credits oder Wild Favor um. Spätere Einnahmen und Ausgaben bleiben erhalten. Der Rückgängig-Eintrag wird pro Währung geführt und beim Laden eines Spielstands oder Starten eines neuen Spiels zurückgesetzt.
 - **Mindeststand halten.** Aktiviere die Option bei der gewünschten Währung. Fällt das Guthaben unter den Stand bei Aktivierung, füllt der Trainer es bis zu diesem Wert auf. Der Mindeststand bleibt bei geschlossenem Trainer-Menü aktiv und wird beim Laden eines Spielstands oder Starten eines neuen Spiels zurückgesetzt. Schalte ihn aus, bevor du einen niedrigeren Wert setzt.
 - **Gegenstände hinzufügen.** Öffne den Reiter **Gegenstände**, suche nach Name oder ID, wähle einen Treffer und gib eine Menge von 1 bis 50 ein. **Ins Inventar** fügt so viele Einheiten hinzu, wie im Ladeninventar Platz haben. Die Liste verwendet die Spielsprache, sofern ein lokalisierter Name verfügbar ist.
 - **Personen und Ware analysieren.** Unter **F7 → Analyse** schaltest du jede Anzeige einzeln ein. Die Kundenanzeige oben rechts zeigt Fahndungsstatus und Augmentierung samt Stufe. Fahre mit der Maus über Ware, um unterstützte Fälschungen, Repliken, Diebesgut, Schmuggelware und verfälschte Haltbarkeit zu erkennen. Je nach Ware zeigt der Tooltip die tatsächliche Reinheit, Frische, Qualität, Haltbarkeit oder den Gutachterwert. Das Spiel speichert die gewählten Anzeigeoptionen in der Mod-Konfiguration.
+- **Fraktionsruf bearbeiten.** Unter **F7 → Laden** wählst du eine Fraktion und änderst ihren Ruf um 10 Punkte oder setzt einen Wert zwischen −200 und +200. Das Spiel aktualisiert die Rufvorteile über seine eigene Rufberechnung.
+- **Suchversuche auffüllen.** Öffne **F7 → Laden** auf dem Schrottplatz. Die Schaltfläche füllt die üblichen Suchversuche auf und setzt das von der Versuchsanzahl abhängige Verletzungsrisiko zurück. Eine aktuelle Verletzung wirkt weiter.
 
 Das Spiel übernimmt die aktuellen Guthaben beim regulären Speichern. Zum Entfernen deaktiviere den Mod und lösche bei geschlossenem Spiel den Ordner `Mods\probably_stolen_trainer`.
 
@@ -50,9 +53,12 @@ A live mod for **Probably Stolen – Cyberpunk Shopkeeper Sim**, built against v
 
 - Add **1,000 or 10,000 credits** and **100 or 1,000 Wild Favor**.
 - **Set a balance.** Enter a whole number from 0 to 2,147,483,647 without thousands separators and click **Set**.
+- **Undo a balance change.** The button next to **Set** reverses your latest manual trainer change to credits or Wild Favor. Later earnings and spending are preserved. Each currency tracks its own undo, which resets when you load a save or start a new game.
 - **Keep a minimum balance.** Turn on the option for either currency. Whenever the balance drops below the amount it had when enabled, the trainer tops it up to that amount. The minimum stays active while the trainer menu is closed and resets when you load a save or start a new game. Turn it off before setting a lower balance.
 - **Add items.** Open the **Items** tab, search by name or ID, select a result, and enter a quantity from 1 to 50. **Add to inventory** adds as many units as will fit in the shop inventory. The list uses the game's language where localized names are available.
 - **Inspect people and goods.** Open **F7 → Inspection** to enable each display separately. The customer panel in the top right shows wanted status and augmentation tier. Hover over an item to reveal supported counterfeits, replicas, stolen goods, contraband, and misrepresented durability. Depending on the item, the tooltip shows true purity, freshness, quality, durability, or appraisal value. The game saves the display options in the mod configuration.
+- **Edit faction reputation.** In **F7 → Shop**, select a faction and adjust its reputation by 10 points or set a value from −200 to +200. The game updates reputation perks through its own reputation logic.
+- **Refill scavenging attempts.** Open **F7 → Shop** while at the Dumping Grounds. The button restores the usual number of attempts and resets the injury risk tied to the attempt count. Any current injury still applies.
 
 The game's regular save process keeps your current balances. To remove the mod, disable it, close the game, and delete `Mods\probably_stolen_trainer`.
 

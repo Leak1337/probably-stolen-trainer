@@ -63,12 +63,12 @@ namespace ProbablyStolenTrainer
                 GUILayout.Label(Text("Keine Treffer", "No results"));
 
             GUILayout.BeginHorizontal();
-            bool previousPage = PageButton(Text("Zurück", "Previous"), page > 0);
+            bool previousPage = EnabledButton(Text("Zurück", "Previous"), page > 0, 82);
             GUILayout.FlexibleSpace();
             if (matches.Count > 0)
                 GUILayout.Label($"{Number(first + 1)}–{Number(last)} / {Number(matches.Count)}");
             GUILayout.FlexibleSpace();
-            bool nextPage = PageButton(Text("Weiter", "Next"), last < matches.Count);
+            bool nextPage = EnabledButton(Text("Weiter", "Next"), last < matches.Count, 82);
             GUILayout.EndHorizontal();
             if (previousPage || nextPage)
             {
@@ -82,18 +82,9 @@ namespace ProbablyStolenTrainer
             GUILayout.Label(Text($"Menge (1–{MaximumQuantity})", $"Quantity (1–{MaximumQuantity})"), GUILayout.Width(120));
             quantity = GUILayout.TextField(quantity, GUILayout.Width(60));
             GUILayout.FlexibleSpace();
-            if (PageButton(Text("Ins Inventar", "Add to inventory"), selectedItem != null, 140))
+            if (EnabledButton(Text("Ins Inventar", "Add to inventory"), selectedItem != null, 140))
                 SpawnSelectedItem();
             GUILayout.EndHorizontal();
-        }
-
-        private static bool PageButton(string label, bool enabled, float width = 82)
-        {
-            bool previous = GUI.enabled;
-            GUI.enabled = previous && enabled;
-            bool clicked = GUILayout.Button(label, GUILayout.Width(width));
-            GUI.enabled = previous;
-            return clicked;
         }
 
         private void LoadCatalog()
