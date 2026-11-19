@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Manifest>
+  <ID>probably_stolen_trainer</ID>
+  <Name>Probably Stolen Trainer</Name>
+  <Author>Local</Author>
+  <ModVersion>1.0</ModVersion>
+  <Description>Live-Menü für Credits und Wild Favor. F7 öffnet den Trainer während eines Spiels.</Description>
+  <GameVersions>
+    <Version>1.0.0.13</Version>
+  </GameVersions>
+  <Prerequisites />
+  <Assemblies>
+    <Assembly>ProbablyStolenTrainer.dll</Assembly>
+  </Assemblies>
+  <Capabilities />
+</Manifest>

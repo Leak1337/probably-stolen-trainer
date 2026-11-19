@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ManagedDirectory>$(GameDirectory)\Probably Stolen_Data\Managed</ManagedDirectory>
+    <DebugType>none</DebugType>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <ItemGroup>
+    <GameAssembly Include="Assembly-CSharp;UnityEngine.CoreModule;UnityEngine.IMGUIModule;UnityEngine.InputLegacyModule" />
+    <Reference Include="@(GameAssembly)">
+      <HintPath>$(ManagedDirectory)\%(Identity).dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  <Target Name="CheckGameDirectory" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="'$(GameDirectory)' == '' Or !Exists('$(ManagedDirectory)\Assembly-CSharp.dll')"
+           Text="Set GameDirectory to the folder containing Probably Stolen.exe with -p:GameDirectory=..." />
+  </Target>
+</Project>
