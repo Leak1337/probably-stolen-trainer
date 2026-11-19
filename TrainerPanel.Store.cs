@@ -94,8 +94,8 @@ namespace ProbablyStolenTrainer
         private void DrawScavenging(PlayerStore store)
         {
             GUILayout.Label(Text("Schrottplatz", "Dumping Grounds"));
-            MapUIManager map = MapUIManager.Instance;
-            if (map == null || !map.isOutside || map.Current?.Id != AfterhourLocation.DUMPING_GROUND)
+            MapUIManager map = GetDumpingGroundsMap();
+            if (map == null)
             {
                 GUILayout.Label(Text("Suchversuche können vor Ort aufgefüllt werden.", "Refill scavenging attempts while at the Dumping Grounds."));
                 return;
@@ -115,6 +115,12 @@ namespace ProbablyStolenTrainer
                 map.UpdateScavUI();
                 message = Text("Suchversuche aufgefüllt.", "Scavenging attempts refilled.");
             }
+        }
+
+        private static MapUIManager GetDumpingGroundsMap()
+        {
+            MapUIManager map = MapUIManager.Instance;
+            return map != null && map.isOutside && map.Current?.Id == AfterhourLocation.DUMPING_GROUND ? map : null;
         }
     }
 }

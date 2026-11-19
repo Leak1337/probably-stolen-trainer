@@ -54,6 +54,9 @@ namespace ProbablyStolenTrainer
     {
         private static readonly CultureInfo German = CultureInfo.GetCultureInfo("de-DE");
         private static readonly CultureInfo English = CultureInfo.GetCultureInfo("en-US");
+        private static readonly Color PanelBorder = new Color32(68, 86, 105, 255);
+        private static readonly Color PanelBackground = new Color32(24, 30, 39, 255);
+        private static readonly Color PanelHeader = new Color32(37, 48, 62, 255);
 
         private static bool? german;
         private readonly BalanceControl credits = new BalanceControl();
@@ -61,7 +64,8 @@ namespace ProbablyStolenTrainer
         private bool visible;
         private int selectedTab;
         private string message = "";
-        private Rect window = new Rect(24, 40, 420, 425);
+        private Rect window = new Rect(24, 40, 460, 425);
+        private GUIStyle titleStyle;
 
         internal InspectionOptions Inspection { get; set; }
 
@@ -108,7 +112,7 @@ namespace ProbablyStolenTrainer
                 GUI.depth = -100;
                 Inspection.DrawCustomer(PlayerStore.Instance);
                 if (visible)
-                    window = GUI.Window(GetInstanceID(), window, DrawPanel, "Probably Stolen Trainer");
+                    window = GUI.Window(GetInstanceID(), window, DrawPanel, GUIContent.none);
             }
             finally
             {
@@ -118,6 +122,7 @@ namespace ProbablyStolenTrainer
 
         private void DrawPanel(int id)
         {
+            DrawPanelBackground();
             PlayerStore store = PlayerStore.Instance;
 
             GUILayout.BeginVertical();
@@ -135,7 +140,8 @@ namespace ProbablyStolenTrainer
             GUILayout.Space(6);
             int nextTab = GUILayout.Toolbar(selectedTab, new[]
             {
-                Text("Guthaben", "Balances"), Text("Gegenstände", "Items"), Text("Analyse", "Inspection"), Text("Laden", "Shop")
+                Text("Guthaben", "Balances"), Text("Gegenstände", "Items"), Text("Analyse", "Inspection"),
+                Text("Laden", "Shop"), Text("Wartung", "Maintenance")
             });
             if (nextTab != selectedTab)
             {
@@ -156,6 +162,9 @@ namespace ProbablyStolenTrainer
                 case 3:
                     DrawStoreTools(store);
                     break;
+                case 4:
+                    DrawMaintenance(store);
+                    break;
                 default:
                     DrawBalance("Credits", ref store.playerCash, credits, 1000, 10000);
                     GUILayout.Space(10);
@@ -170,6 +179,36 @@ namespace ProbablyStolenTrainer
             GUILayout.EndVertical();
 
             GUI.DragWindow(new Rect(0, 0, window.width, 20));
+        }
+
+        private void DrawPanelBackground()
+        {
+            if (Event.current.type != EventType.Repaint)
+                return;
+
+            Color previous = GUI.color;
+            try
+            {
+                GUI.color = PanelBorder;
+                GUI.DrawTexture(new Rect(0, 0, window.width, window.height), Texture2D.whiteTexture);
+                GUI.color = PanelBackground;
+                GUI.DrawTexture(new Rect(1, 1, window.width - 2, window.height - 2), Texture2D.whiteTexture);
+                GUI.color = PanelHeader;
+                GUI.DrawTexture(new Rect(1, 1, window.width - 2, 23), Texture2D.whiteTexture);
+
+                if (titleStyle == null)
+                {
+                    titleStyle = new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold };
+                    titleStyle.normal.textColor = Color.white;
+                }
+
+                GUI.color = Color.white;
+                GUI.Label(new Rect(10, 2, window.width - 20, 22), "Probably Stolen Trainer", titleStyle);
+            }
+            finally
+            {
+                GUI.color = previous;
+            }
         }
 
         private void DrawBalance(string name, ref int balance, BalanceControl control, int small, int large)
