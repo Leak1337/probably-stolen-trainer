@@ -3,8 +3,8 @@
   <ID>probably_stolen_trainer</ID>
   <Name>Probably Stolen Trainer</Name>
   <Author>Local</Author>
-  <ModVersion>1.0</ModVersion>
-  <Description>Live-Menü für Credits und Wild Favor. F7 öffnet den Trainer während eines Spiels.</Description>
+  <ModVersion>1.1</ModVersion>
+  <Description>DE: Credits und Wild Favor hinzufügen, setzen oder auf einem Mindeststand halten. Im Spiel mit F7 öffnen. EN: Add or set credits and Wild Favor, or keep a minimum balance. Press F7 in-game.</Description>
   <GameVersions>
     <Version>1.0.0.13</Version>
   </GameVersions>

@@ -14,6 +14,6 @@
   </ItemGroup>
   <Target Name="CheckGameDirectory" BeforeTargets="ResolveAssemblyReferences">
     <Error Condition="'$(GameDirectory)' == '' Or !Exists('$(ManagedDirectory)\Assembly-CSharp.dll')"
-           Text="Set GameDirectory to the folder containing Probably Stolen.exe with -p:GameDirectory=..." />
+           Text="Gib mit -p:GameDirectory=... den Spielordner an. / Set the game folder with -p:GameDirectory=..." />
   </Target>
 </Project>

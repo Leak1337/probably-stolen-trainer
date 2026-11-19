@@ -1,11 +1,12 @@
 using System;
+using System.Globalization;
 using UnityEngine;
 
 namespace ProbablyStolenTrainer
 {
     public sealed class TrainerMod : IMod
     {
-        private GameObject panel;
+        private TrainerPanel panel;
 
         public void Init(ModManifest manifest) { }
 
@@ -22,8 +23,8 @@ namespace ProbablyStolenTrainer
 
             if (panel != null)
             {
-                panel.SetActive(false);
-                UnityEngine.Object.Destroy(panel);
+                panel.gameObject.SetActive(false);
+                UnityEngine.Object.Destroy(panel.gameObject);
             }
         }
 
@@ -31,20 +32,38 @@ namespace ProbablyStolenTrainer
 
         private void CreatePanel()
         {
-            if (panel != null)
-                return;
+            if (panel == null)
+            {
+                // Gehört zur Spielszene / Owned by the gameplay scene.
+                var panelObject = new GameObject("Probably Stolen Trainer");
+                panel = panelObject.AddComponent<TrainerPanel>();
+            }
 
-            // The panel belongs to the gameplay scene and is destroyed with it.
-            panel = new GameObject("Probably Stolen Trainer");
-            panel.AddComponent<TrainerPanel>();
+            panel.ResetSession();
         }
     }
 
     public sealed class TrainerPanel : MonoBehaviour
     {
+        private static readonly CultureInfo German = CultureInfo.GetCultureInfo("de-DE");
+        private static readonly CultureInfo English = CultureInfo.GetCultureInfo("en-US");
+
+        private static bool? german;
+        private readonly BalanceControl credits = new BalanceControl();
+        private readonly BalanceControl favor = new BalanceControl();
         private bool visible;
         private string message = "";
-        private Rect window = new Rect(24, 64, 320, 232);
+        private Rect window = new Rect(24, 64, 360, 334);
+
+        private void Awake() => german ??= Application.systemLanguage == SystemLanguage.German;
+
+        internal void ResetSession()
+        {
+            credits.Reset();
+            favor.Reset();
+            visible = false;
+            message = "";
+        }
 
         private void Update()
         {
@@ -53,6 +72,16 @@ namespace ProbablyStolenTrainer
                 visible = !visible;
                 message = "";
             }
+        }
+
+        private void LateUpdate()
+        {
+            if ((!credits.Minimum.HasValue && !favor.Minimum.HasValue) || !PlayerStore.HasInstance)
+                return;
+
+            PlayerStore store = PlayerStore.Instance;
+            store.playerCash = credits.ApplyMinimum(store.playerCash);
+            store.wildFavor = favor.ApplyMinimum(store.wildFavor);
         }
 
         private void OnGUI()
@@ -78,49 +107,105 @@ namespace ProbablyStolenTrainer
 
             GUILayout.BeginVertical();
             GUILayout.Space(8);
-            GUILayout.Label($"Credits   {store.GetCash():N0}");
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("+1.000", GUILayout.Height(28)))
-                AddCredits(store, 1000);
-            if (GUILayout.Button("+10.000", GUILayout.Height(28)))
-                AddCredits(store, 10000);
+            GUILayout.Label(Text("Sprache", "Language"));
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button(Text("EN", "DE"), GUILayout.Width(50)))
+            {
+                german = german != true;
+                message = "";
+            }
             GUILayout.EndHorizontal();
 
             GUILayout.Space(8);
-            GUILayout.Label($"Wild Favor   {store.wildFavor:N0}");
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("+100", GUILayout.Height(28)))
-                AddFavor(store, 100);
-            if (GUILayout.Button("+1.000", GUILayout.Height(28)))
-                AddFavor(store, 1000);
-            GUILayout.EndHorizontal();
+            DrawBalance("Credits", ref store.playerCash, credits, 1000, 10000);
+            GUILayout.Space(10);
+            DrawBalance("Wild Favor", ref store.wildFavor, favor, 100, 1000);
 
             GUILayout.Space(8);
             GUILayout.Label(message);
-            if (GUILayout.Button("Schließen (F7)", GUILayout.Height(26)))
+            if (GUILayout.Button(Text("Schließen (F7)", "Close (F7)"), GUILayout.Height(26)))
                 visible = false;
             GUILayout.EndVertical();
 
             GUI.DragWindow(new Rect(0, 0, window.width, 20));
         }
 
-        private void AddCredits(PlayerStore store, int amount)
+        private void DrawBalance(string name, ref int balance, BalanceControl control, int small, int large)
         {
-            int added = CapIncrease(store.GetCash(), amount);
-            ModHelper.AddCredit(added, false);
-            message = added == 0 ? "Credit-Limit erreicht" : $"+{added:N0} Credits";
+            GUILayout.Label($"{name}   {Number(balance)}");
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button($"+{Number(small)}", GUILayout.Height(26)))
+                AddBalance(name, ref balance, small);
+            if (GUILayout.Button($"+{Number(large)}", GUILayout.Height(26)))
+                AddBalance(name, ref balance, large);
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(Text("Neuer Stand", "New balance"), GUILayout.Width(105));
+            control.Input = GUILayout.TextField(control.Input);
+            if (GUILayout.Button(Text("Setzen", "Set"), GUILayout.Width(75)))
+                SetBalance(name, ref balance, control);
+            GUILayout.EndHorizontal();
+
+            if (control.Minimum is int minimum)
+            {
+                if (GUILayout.Button(Text($"Mindeststand {Number(minimum)} · Ausschalten", $"Minimum {Number(minimum)} · Turn off")))
+                    control.Minimum = null;
+            }
+            else if (GUILayout.Button(Text("Aktuellen Stand als Minimum halten", "Keep current balance as minimum")))
+            {
+                control.Minimum = balance;
+            }
         }
 
-        private void AddFavor(PlayerStore store, int amount)
+        private void AddBalance(string name, ref int balance, int amount)
         {
-            int added = CapIncrease(store.wildFavor, amount);
-            store.wildFavor += added;
-            message = added == 0 ? "Wild-Favor-Limit erreicht" : $"+{added:N0} Wild Favor";
+            int next = BalanceControl.Increase(balance, amount);
+            int added = next - balance;
+            balance = next;
+            message = added == 0 ? Text("Obergrenze erreicht", "Upper limit reached") : $"+{Number(added)} {name}";
         }
 
-        private static int CapIncrease(int current, int requested)
+        private void SetBalance(string name, ref int balance, BalanceControl control)
         {
-            return (int)Math.Min(requested, (long)int.MaxValue - current);
+            if (!BalanceControl.TryParse(control.Input, out int value))
+            {
+                message = Text("Ganze Zahl von 0 bis 2.147.483.647 eingeben.", "Enter an integer from 0 to 2,147,483,647.");
+                return;
+            }
+
+            if (control.Minimum is int minimum && value < minimum)
+            {
+                message = Text("Schalte zuerst den Mindeststand aus.", "Turn off the minimum first.");
+                return;
+            }
+
+            balance = value;
+            message = Text($"{name} auf {Number(value)} gesetzt", $"{name} set to {Number(value)}");
         }
+
+        private static string Text(string de, string en) => german == true ? de : en;
+
+        private static string Number(int value) => value.ToString("N0", german == true ? German : English);
+    }
+
+    internal sealed class BalanceControl
+    {
+        internal string Input = "";
+        internal int? Minimum;
+
+        internal void Reset()
+        {
+            Input = "";
+            Minimum = null;
+        }
+
+        internal int ApplyMinimum(int balance) => Math.Max(balance, Minimum ?? balance);
+
+        internal static int Increase(int balance, int amount) => (int)Math.Min(int.MaxValue, (long)balance + amount);
+
+        internal static bool TryParse(string input, out int value) =>
+            int.TryParse(input, NumberStyles.None, CultureInfo.InvariantCulture, out value);
     }
 }
